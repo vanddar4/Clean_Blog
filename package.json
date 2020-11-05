@@ -1,0 +1,23 @@
+{
+  "name": "clean_blog",
+  "version": "1.0.0",
+  "description": "Blog with the MEN stack",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanddar4/Clean_Blog.git"
+  },
+  "author": "vanddar4",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vanddar4/Clean_Blog/issues"
+  },
+  "homepage": "https://github.com/vanddar4/Clean_Blog#readme"
+}
