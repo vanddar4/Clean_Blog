@@ -2,13 +2,38 @@
   "name": "clean_blog",
   "version": "1.0.0",
   "description": "Blog with the MEN stack",
+  "keywords": [
+    "css",
+    "sass",
+    "html",
+    "responsive",
+    "theme",
+    "template"
+  ],
   "main": "index.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "@fortawesome/fontawesome-free": "5.15.1",
+    "bootstrap": "4.5.3",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "jquery": "3.5.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "browser-sync": "2.26.13",
+    "del": "6.0.0",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "7.0.1",
+    "gulp-clean-css": "4.3.0",
+    "gulp-header": "2.0.9",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "2.0.0",
+    "gulp-sass": "4.1.0",
+    "gulp-uglify": "3.0.2",
+    "merge-stream": "2.0.0",
+    "nodemon": "^2.0.6"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
