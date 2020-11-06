@@ -15,28 +15,40 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.static('public'))
 
-
 app.set('view engine','ejs')
 
 app.listen(3333,()=>{
   console.log("App listening on port 3333")
 })
 
-mongoose.connect('mongodb://localhost/clean_blog_db', {useNewUrlParser: true}, { useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/clean_blog_db', 
+  { useNewUrlParser: true }, 
+  { useUnifiedTopology: true }
+)
 //In Case I want to use MongoDB Cloud mongo "mongodb+srv://cluster1.kec6x.mongodb.net/<dbname>" --username vanddar pass nexusair7
 
-app.get('/',(req,res)=>{
+app.get('/', async (req,res)=>{
   //res.sendFile(path.resolve(__dirname, 'pages/index.html'))
-  res.render('index')
+  const blogposts = await BlogPost.find({})
+  res.render('index',{
+    blogposts
+  });
+  console.log(blogposts)
 })
+
 app.get('/about',(req,res)=>{
   // res.sendFile(path.resolve(__dirname, 'pages/about.html'))
   res.render('about')
 })
-app.get('/post',(req,res)=>{
-  // res.sendFile(path.resolve(__dirname, 'pages/post.html'))
-  res.render('post')
+
+app.get('/post/:id',async (req,res)=>{
+  console.log(req.params)
+  const blogpost = await BlogPost.findById(req.params.id)
+  res.render('post', {
+    blogpost
+  })
 })
+
 app.get('/contact',(req,res)=>{
   // res.sendFile(path.resolve(__dirname, 'pages/contact.html'))
   res.render('contact')
