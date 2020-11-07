@@ -6,10 +6,7 @@
 // const notFoundPage = fs.readFileSync('notfound.html')
 const express = require('express')
 const path = require('path')
-
 const ejs = require('ejs')
-
-
 const mongoose = require('mongoose')
 
 const app = new express()
@@ -24,6 +21,20 @@ app.set('view engine','ejs')
 
 const fileUpload = require('express-fileupload')
 app.use(fileUpload())
+
+//Creating custom middleware
+const customMiddleWare = (req,res,next)=>{
+  console.log('Custom middleware called')
+  next()
+}
+app.use(customMiddleWare)
+const validateMiddleWare = (req,res,next)=>{
+  if(req.files == null || req.body.title == null || req.body.body == null){
+    return res.redirect('/posts/new')
+  }
+  next()
+}
+app.use('/posts/store',validateMiddleWare)
 
 app.listen(3333,()=>{
   console.log("App listening on port 3333")
@@ -44,7 +55,7 @@ app.get('/', async (req,res)=>{
   res.render('index',{
     blogposts
   });
-  console.log(blogposts)
+  //console.log(blogposts)
 })
 
 app.get('/about',(req,res)=>{
@@ -53,7 +64,7 @@ app.get('/about',(req,res)=>{
 })
 
 app.get('/post/:id',async (req,res)=>{
-  console.log(req.params)
+  //console.log(req.params)
   const blogpost = await BlogPost.findById(req.params.id)
   res.render('post', {
     blogpost
