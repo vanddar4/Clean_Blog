@@ -1,4 +1,5 @@
 const express = require('express')
+const expressSession = require ('express-session')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
 
@@ -16,6 +17,12 @@ app.use(fileUpload())
 app.listen(3333,()=>{
   console.log("App listening on port 3333")
 })
+//Express Session
+app.use(expressSession({
+  secret: 'HibernationSquirrel2@',
+  resave: true,
+  saveUninitialized: true,
+}))
 
 //Mongoose
 mongoose.connect('mongodb://localhost/clean_blog_db', 
@@ -28,6 +35,8 @@ mongoose.connect('mongodb://localhost/clean_blog_db',
 //In Case I want to use MongoDB Cloud mongo "mongodb+srv://cluster1.kec6x.mongodb.net/<dbname>" --username vanddar pass nexusair7
 
 //Creating custom middleware
+const authMiddleware = require('./middleware/authMiddleware');
+const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
 const validateMiddleWare = require("./middleware/validateMiddleware");
 const customMiddleWare = (req,res,next)=>{
   console.log('Custom middleware called')
@@ -36,6 +45,12 @@ const customMiddleWare = (req,res,next)=>{
 app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
 
+//Accessing userId
+global.loggedIn = null;
+app.use("*",(req,res,next) => {
+  loggedIn = req.session.userId;
+  next()
+})
 //Controllers
 const newPostController = require('./controllers/newPost')
 const homeController = require('./controllers/home')
@@ -45,18 +60,20 @@ const newUserController = require('./controllers/newUser')
 const storeUserController = require('./controllers/storeUser')
 const loginController = require('./controllers/login')
 const loginUserController = require('./controllers/loginUser')
+const logoutController = require('./controllers/logout')
 
-
-app.get('/posts/new', newPostController)
+app.get('/posts/new', authMiddleware, newPostController)
 app.get('/', homeController)
 app.get('/post/:id', getPostController)
-app.get('/auth/register', newUserController)
-app.get('/auth/login', loginController)
+app.get('/auth/register',redirectIfAuthenticatedMiddleware, newUserController)
+app.get('/auth/login',redirectIfAuthenticatedMiddleware, loginController)
+app.get('/auth/logout', logoutController)
 
-app.post('/posts/store', storePostController)
-app.post('/users/register', storeUserController)
-app.post('/users/login', loginUserController)
+app.post('/posts/store', authMiddleware, storePostController)
+app.post('/users/register',redirectIfAuthenticatedMiddleware, storeUserController)
+app.post('/users/login',redirectIfAuthenticatedMiddleware, loginUserController)
 
+app.use((req, res) => res.render('notfound'));
 
 // Old Code
 // const http = require('http');
