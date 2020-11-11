@@ -14,6 +14,9 @@ app.set('view engine','ejs')
 const fileUpload = require('express-fileupload')
 app.use(fileUpload())
 
+const flash = require('connect-flash')
+app.use(flash());
+
 app.listen(3333,()=>{
   console.log("App listening on port 3333")
 })
