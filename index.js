@@ -1,33 +1,28 @@
 const express = require('express')
-const expressSession = require ('express-session')
-const ejs = require('ejs')
-const mongoose = require('mongoose')
 
 const app = new express()
-app.use(express.static('public'))
-
+const ejs = require('ejs')
+const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
-app.set('view engine','ejs')
-
+const expressSession = require ('express-session')
 const fileUpload = require('express-fileupload')
-app.use(fileUpload())
+
+//Controllers
+const newPostController = require('./controllers/newPost')
+const homeController = require('./controllers/home')
+const storePostController = require('./controllers/storePost')
+const getPostController = require('./controllers/getPost')
+const newUserController = require('./controllers/newUser')
+const storeUserController = require('./controllers/storeUser')
+const loginController = require('./controllers/login')
+const loginUserController = require('./controllers/loginUser')
+const logoutController = require('./controllers/logout')
 
 const flash = require('connect-flash')
-app.use(flash());
 
-app.listen(3333,()=>{
-  console.log("App listening on port 3333")
-})
-//Express Session
-app.use(expressSession({
-  secret: 'HibernationSquirrel2@',
-  resave: true,
-  saveUninitialized: true,
-}))
+app.use(fileUpload())
 
-//Mongoose
+//Mongoose - Need to connect to db with "mongod --config /usr/local/etc/mongod.conf"
 mongoose.connect('mongodb://localhost/clean_blog_db', 
   { useNewUrlParser: true,  
    useUnifiedTopology: true,
@@ -36,6 +31,14 @@ mongoose.connect('mongodb://localhost/clean_blog_db',
   .then(() => console.log('Database Connected'))
   .catch(err => console.log(err));
 //In Case I want to use MongoDB Cloud mongo "mongodb+srv://cluster1.kec6x.mongodb.net/<dbname>" --username vanddar pass nexusair7
+
+app.set('view engine','ejs')
+
+app.use(express.static('public'))
+
+app.listen(3333,()=>{
+  console.log("App listening on port 3333")
+})
 
 //Creating custom middleware
 const authMiddleware = require('./middleware/authMiddleware');
@@ -48,23 +51,23 @@ const customMiddleWare = (req,res,next)=>{
 app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
 
+//Express Session
+app.use(expressSession({
+  secret: 'HibernationSquirrel2@',
+  resave: true,
+  saveUninitialized: true,
+}))
+
 //Accessing userId
 global.loggedIn = null;
 app.use("*",(req,res,next) => {
   loggedIn = req.session.userId;
   next()
 })
-//Controllers
-const newPostController = require('./controllers/newPost')
-const homeController = require('./controllers/home')
-const storePostController = require('./controllers/storePost')
-const getPostController = require('./controllers/getPost')
-const newUserController = require('./controllers/newUser')
-const storeUserController = require('./controllers/storeUser')
-const loginController = require('./controllers/login')
-const loginUserController = require('./controllers/loginUser')
-const logoutController = require('./controllers/logout')
 
+app.use(flash());
+
+//GET Routes
 app.get('/posts/new', authMiddleware, newPostController)
 app.get('/', homeController)
 app.get('/post/:id', getPostController)
@@ -72,9 +75,30 @@ app.get('/auth/register',redirectIfAuthenticatedMiddleware, newUserController)
 app.get('/auth/login',redirectIfAuthenticatedMiddleware, loginController)
 app.get('/auth/logout', logoutController)
 
+//POST Routes
 app.post('/posts/store', authMiddleware, storePostController)
 app.post('/users/register',redirectIfAuthenticatedMiddleware, storeUserController)
 app.post('/users/login',redirectIfAuthenticatedMiddleware, loginUserController)
+
+
+
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.use((req, res) => res.render('notfound'));
 
