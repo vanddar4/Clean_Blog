@@ -31,9 +31,6 @@
             <h2 class="post-title">
               <%= blogposts[i].title %>
             </h2>
-            <h3 class="post-subtitle">
-              <%= blogposts[i].body %>
-            </h3>
           </a>
           <p class="post-meta">Posted by
             <a href="#"><%= blogposts[i].username%></a> <!--Does not like "blogposts[i].userid.username" For exclusive posts per user-->
@@ -49,9 +46,7 @@
       </div>
     </div>
   </div>
-
   <hr>
-
   <!-- Footer -->
   <%- include('layouts/footer'); -%>
 
@@ -59,5 +54,4 @@
   <%- include('layouts/scripts'); -%>
 
 </body>
-
 </html>

@@ -18,6 +18,14 @@ const loginController = require('./controllers/login')
 const loginUserController = require('./controllers/loginUser')
 const logoutController = require('./controllers/logout')
 
+//Creating custom middleware
+const validateMiddleWare = require("./middleware/validateMiddleware");
+const authMiddleware = require('./middleware/authMiddleware');
+const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
+// const customMiddleWare = (req,res,next)=>{
+//   console.log('Custom middleware called')
+//   next()
+// }
 const flash = require('connect-flash')
 
 app.use(fileUpload())
@@ -32,23 +40,16 @@ mongoose.connect('mongodb://localhost/clean_blog_db',
   .catch(err => console.log(err));
 //In Case I want to use MongoDB Cloud mongo "mongodb+srv://cluster1.kec6x.mongodb.net/<dbname>" --username vanddar pass nexusair7
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
 app.set('view engine','ejs')
-
 app.use(express.static('public'))
 
 app.listen(3333,()=>{
   console.log("App listening on port 3333")
 })
 
-//Creating custom middleware
-const authMiddleware = require('./middleware/authMiddleware');
-const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware')
-const validateMiddleWare = require("./middleware/validateMiddleware");
-const customMiddleWare = (req,res,next)=>{
-  console.log('Custom middleware called')
-  next()
-}
-app.use(customMiddleWare)
+// app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
 
 //Express Session
@@ -75,32 +76,12 @@ app.get('/auth/register',redirectIfAuthenticatedMiddleware, newUserController)
 app.get('/auth/login',redirectIfAuthenticatedMiddleware, loginController)
 app.get('/auth/logout', logoutController)
 
+app.use((req, res) => res.render('notfound'));
+
 //POST Routes
 app.post('/posts/store', authMiddleware, storePostController)
 app.post('/users/register',redirectIfAuthenticatedMiddleware, storeUserController)
 app.post('/users/login',redirectIfAuthenticatedMiddleware, loginUserController)
-
-
-
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.use((req, res) => res.render('notfound'));
 
 // Old Code
 // const http = require('http');
