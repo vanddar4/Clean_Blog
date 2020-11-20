@@ -14,8 +14,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="page-heading">
-            <h1>Register a new account</h1>
-            <span class="subheading">Express Yourself</span>
+            <h1>Register a new account</h1>            
           </div>
         </div>
       </div>
@@ -25,36 +24,36 @@
   <!-- Main Content -->
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-        <% if(errors != null && errors.length > 0){ %>
-          <ul class="list-group">
-            <% for (var i = 0; i < errors.length;i++){ %>
-              <li class="list-group-item list-group-item-danger">,<%=errors[i] %></li>
-            <% } %>
-          </ul>
-        <% } %>  
+      <div class="col-lg-8 col-md-10 mx-auto">        
+          <% if(errors != null && errors.length > 0){ %>
+            <ul class="list-group"></ul>          
+              <!-- loop through each error -->
+              <% for (var i = 0; i < errors.length; i++) { %>
+                <li class="list-group-item list-group-item-danger"><%= errors[i] %></li> <!-- make error red -->
+              <% } %>
+            </ul>          
+          <% } %>                                                
         <form action="/users/register" method="POST" enctype="multipart/form-data">
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label>User Name</label>
-              <input type="text" class="form-control" placeholder="User Name" name="username" value="<%= username%>">
+              <input type="text" class="form-control" placeholder="User Name" name="username" value="<%= username %>">                    
             </div>
           </div>
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label>Password</label>
-              <input type="password" class="form-control" placeholder="Password" name="password" value="<%= password%>">
+              <input type="password" class="form-control" placeholder="Password" name="password" value="<%= password %>">              
             </div>
-          </div>
-          <br>
-          <div id="form-group">
-            <button type="submit" class="btn btn-primary" id="sendMessageButton">Register</button>
+          </div>                       
+          <br>                    
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <hr>
 
   <!-- Footer -->
   <%- include('layouts/footer'); -%>

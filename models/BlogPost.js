@@ -6,11 +6,11 @@ const BlogPostSchema = new Schema({
   body: String,
   //username: String,
   userid: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: mongoose.Schema.Types.ObjectId, // suppose to be a valid mongodb object id. mongodb has specific ids for each doc and they have to be in a valid format
+    ref: 'User', // reference User collection 
     required: true
-  },
-  datePosted: {
+  },  
+  datePosted:{ 
     type: Date,
     default: new Date()
   },
@@ -18,5 +18,4 @@ const BlogPostSchema = new Schema({
 });
 
 const BlogPost = mongoose.model('BlogPost',BlogPostSchema);
-
 module.exports = BlogPost
