@@ -31,7 +31,8 @@ const flash = require('connect-flash')
 app.use(fileUpload())
 
 //Mongoose - Need to connect to db with "mongod --config /usr/local/etc/mongod.conf"
-mongoose.connect('mongodb://localhost/clean_blog_db', 
+//mongoose.connect('mongodb://localhost/clean_blog_db', 
+mongoose.connect('mongodb+srv://vanddar:nexusair7@cluster1.kec6x.mongodb.net/Clean_Blog',
   { useNewUrlParser: true,  
    useUnifiedTopology: true,
    useCreateIndex: true
