@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const expressSession = require ('express-session')
 const fileUpload = require('express-fileupload')
+const URI = require('dotenv').config({path: __dirname + '/.env'})
 
 //Controllers
 const newPostController = require('./controllers/newPost')
@@ -17,6 +18,7 @@ const storeUserController = require('./controllers/storeUser')
 const loginController = require('./controllers/login')
 const loginUserController = require('./controllers/loginUser')
 const logoutController = require('./controllers/logout')
+//console.log(require('dotenv').config())
 
 //Creating custom middleware
 const validateMiddleWare = require("./middleware/validateMiddleware");
@@ -32,7 +34,7 @@ app.use(fileUpload())
 
 //Mongoose - Need to connect to db with "mongod --config /usr/local/etc/mongod.conf"
 //mongoose.connect('mongodb://localhost/clean_blog_db', 
-mongoose.connect('mongodb+srv://vanddar:nexusair7@cluster1.kec6x.mongodb.net/Clean_Blog',
+mongoose.connect('dotenv',
   { useNewUrlParser: true,  
    useUnifiedTopology: true,
    useCreateIndex: true
@@ -46,9 +48,16 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.set('view engine','ejs')
 app.use(express.static('public'))
 
-app.listen(3333,()=>{
-  console.log("App listening on port 3333")
+let port = process.env.PORT;
+if (port == null || port == ""){
+  port = 3333;
+}
+app.listen(port, ()=>{
+  console.log('App listening...')
 })
+// app.listen(3333,()=>{
+//   console.log("App listening on port 3333")
+// })
 
 // app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
