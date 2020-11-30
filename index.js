@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const expressSession = require ('express-session')
 const fileUpload = require('express-fileupload')
-const URI = require('dotenv').config({path: __dirname + '/.env'})
+const dotEnv = require('dotenv/config')
 
 //Controllers
 const newPostController = require('./controllers/newPost')
@@ -33,31 +33,32 @@ const flash = require('connect-flash')
 app.use(fileUpload())
 
 //Mongoose - Need to connect to db with "mongod --config /usr/local/etc/mongod.conf"
+console.log(process.env.DB_ATLAS);
 //mongoose.connect('mongodb://localhost/clean_blog_db', 
-mongoose.connect('dotenv',
+mongoose.connect('DB_ATLAS',
   { useNewUrlParser: true,  
    useUnifiedTopology: true,
    useCreateIndex: true
    })
   .then(() => console.log('Database Connected'))
   .catch(err => console.log(err));
-//In Case I want to use MongoDB Cloud mongo "mongodb+srv://cluster1.kec6x.mongodb.net/<dbname>" --username vanddar pass nexusair7
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.set('view engine','ejs')
 app.use(express.static('public'))
 
-let port = process.env.PORT;
-if (port == null || port == ""){
-  port = 3333;
-}
-app.listen(port, ()=>{
-  console.log('App listening...')
-})
-// app.listen(3333,()=>{
-//   console.log("App listening on port 3333")
+//For Heroku
+// let port = process.env.PORT;
+// if (port == null || port == ""){
+//   port = 3333;
+// }
+// app.listen(port, ()=>{
+//   console.log('App listening...')
 // })
+app.listen(3333,()=>{
+  console.log("App listening on port 3333")
+})
 
 // app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)

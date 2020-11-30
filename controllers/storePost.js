@@ -9,7 +9,7 @@ module.exports = (req,res)=>{
             image: '/img/' + image.name,
             userid: req.session.userId
         })
-        console.log("req.body",req.body)
+        console.log("req.body",req.body,req.session.username)
         res.redirect('/')
     })            
 }
