@@ -33,9 +33,8 @@ const flash = require('connect-flash')
 app.use(fileUpload())
 
 //Mongoose - Need to connect to db with "mongod --config /usr/local/etc/mongod.conf"
-console.log(process.env.DB_ATLAS);
 //mongoose.connect('mongodb://localhost/clean_blog_db', 
-mongoose.connect('DB_ATLAS',
+mongoose.connect(process.env.DB_ATLAS,
   { useNewUrlParser: true,  
    useUnifiedTopology: true,
    useCreateIndex: true
@@ -49,16 +48,16 @@ app.set('view engine','ejs')
 app.use(express.static('public'))
 
 //For Heroku
-// let port = process.env.PORT;
-// if (port == null || port == ""){
-//   port = 3333;
-// }
-// app.listen(port, ()=>{
-//   console.log('App listening...')
-// })
-app.listen(3333,()=>{
-  console.log("App listening on port 3333")
+let port = process.env.PORT;
+if (port == null || port == ""){
+  port = 3333;
+}
+app.listen(port, ()=>{
+  console.log('App listening...')
 })
+// app.listen(3333,()=>{
+//   console.log("App listening on port 3333")
+// })
 
 // app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
