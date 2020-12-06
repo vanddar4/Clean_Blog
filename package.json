@@ -47,11 +47,11 @@
     "type": "git",
     "url": "git+https://github.com/vanddar4/Clean_Blog.git"
   },
-  "author": "vanddar4",
-  "license": "ISC",
+  "license": "MIT",
   "engines": {
     "node": "14.13.0"
   },
+  "author": "vanddar4",
   "bugs": {
     "url": "https://github.com/vanddar4/Clean_Blog/issues"
   },
