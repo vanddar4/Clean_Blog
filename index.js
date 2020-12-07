@@ -48,16 +48,16 @@ app.set('view engine','ejs')
 app.use(express.static('public'))
 
 //For Heroku
-let port = process.env.PORT;
-if (port == null || port == ""){
-  port = 3333;
-}
-app.listen(port, ()=>{
-  console.log('App listening...')
-})
-// app.listen(3333,()=>{
-//   console.log("App listening on port 3333")
+// let port = process.env.PORT;
+// if (port == null || port == ""){
+//   port = 3333;
+// }
+// app.listen(port, ()=>{
+//   console.log('App listening...')
 // })
+app.listen(3333,()=>{
+  console.log("App listening on port 3333")
+})
 
 // app.use(customMiddleWare)
 app.use('/posts/store',validateMiddleWare)
